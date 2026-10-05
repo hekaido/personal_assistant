@@ -1,0 +1,45 @@
+# Модели указаны как slug'и из каталога RouterAI (https://routerai.ru) —
+# провайдер по умолчанию 'router_ai', один ключ даёт доступ к моделям разных вендоров.
+# anthropic/claude-haiku-4.5 и anthropic/claude-sonnet-5 подтверждены живыми запросами.
+# qwen/qwen3.8-27b пробовали для тестов — reasoning-модель, оказалась медленной
+# (заметная задержка на скрытые рассуждения) для батчевого пайплайна extraction.
+# Сейчас на mistralai/mistral-small-3.2-24b-instruct — non-reasoning, быстрая (~1.5-2с),
+# корректно отдаёт nested-массивы в tool use (проверено; meta-llama/llama-3.3-70b-instruct
+# и google/gemini-2.5-flash это не проверку не прошли — либо ломают вложенные массивы
+# в аргументах инструмента, либо вообще не вызывают tool).
+# Чтобы переключить конкретную задачу на прямой Anthropic API — смени provider на 'claude'
+# и model на нативный id (например claude-haiku-4-5), не меняя ничего в коде.
+llm:
+  summarize:
+    provider: router_ai
+    model: mistralai/mistral-small-3.2-24b-instruct
+  extraction:
+    provider: router_ai
+    model: mistralai/mistral-small-3.2-24b-instruct
+  chat:
+    provider: router_ai
+    model: mistralai/mistral-small-3.2-24b-instruct
+  brief:
+    provider: router_ai
+    model: mistralai/mistral-small-3.2-24b-instruct
+  embeddings:
+    provider: local
+    model: BAAI/bge-m3
+
+paths:
+  db_path: ./data/assistant.db
+  telegram_session_path: ./data/telegram.session
+
+telegram:
+  sync_interval_minutes: 15
+  initial_history_months: 6
+
+gmail:
+  sync_interval_minutes: 15
+
+brief:
+  send_hour: 7
+  send_minute: 30
+
+dedup:
+  similarity_threshold: 0.82
